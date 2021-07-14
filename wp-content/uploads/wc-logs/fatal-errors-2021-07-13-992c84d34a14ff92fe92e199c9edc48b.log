@@ -1,0 +1,20 @@
+2021-07-13T14:34:32+00:00 CRITICAL Uncaught Error: Call to undefined method WooCommerce::get() in C:\wamp\www\wordpress\wp-content\themes\storefront\product-import.php:101
+Stack trace:
+#0 C:\wamp\www\wordpress\wp-content\themes\storefront\product-import.php(90): checkCategoryByName('Displays')
+#1 C:\wamp\www\wordpress\wp-content\themes\storefront\product-import.php(177): createCategories()
+#2 C:\wamp\www\wordpress\wp-includes\template-loader.php(106): include('C:\\wamp\\www\\wor...')
+#3 C:\wamp\www\wordpress\wp-blog-header.php(19): require_once('C:\\wamp\\www\\wor...')
+#4 C:\wamp\www\wordpress\index.php(17): require('C:\\wamp\\www\\wor...')
+#5 {main}
+  thrown in C:\wamp\www\wordpress\wp-content\themes\storefront\product-import.php on line 101
+
+2021-07-13T15:46:21+00:00 CRITICAL Uncaught Error: Call to undefined function category_exists() in C:\wamp\www\wordpress\wp-content\themes\storefront\product-import.php:103
+Stack trace:
+#0 C:\wamp\www\wordpress\wp-content\themes\storefront\product-import.php(90): checkCategoryByName('Displays')
+#1 C:\wamp\www\wordpress\wp-content\themes\storefront\product-import.php(181): createCategories()
+#2 C:\wamp\www\wordpress\wp-includes\template-loader.php(106): include('C:\\wamp\\www\\wor...')
+#3 C:\wamp\www\wordpress\wp-blog-header.php(19): require_once('C:\\wamp\\www\\wor...')
+#4 C:\wamp\www\wordpress\index.php(17): require('C:\\wamp\\www\\wor...')
+#5 {main}
+  thrown in C:\wamp\www\wordpress\wp-content\themes\storefront\product-import.php on line 103
+
