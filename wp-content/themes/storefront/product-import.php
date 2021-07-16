@@ -22,13 +22,15 @@ function createProducts() {
 	$imgCounter = 0;
 	foreach ( $products as $product ) {
 		$productExist = checkProductBySku( $product['sku'] );
+		print_r($product);exit;
 		$imagesFormated = array();
+		$url_array =explode('/',$product['url']);
+		$slug= end($url_array);
 		/*Main information */
-		$name          = $product['titulo'];
-		$slug          = $product['url'];
+		$name          = $product['name'];
 		$sku           = $product['sku'];
-		$description   = $product['desc'];
-		$images        = $product['pics'];
+		$description   = $product['description'];
+		$images        = $product['images'];
 		$articulos     = $product['articulos'];
 		$categories    = $product['categorias'];
 		$categoriesIds = array();
