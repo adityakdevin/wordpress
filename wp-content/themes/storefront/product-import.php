@@ -9,64 +9,90 @@ function getWoocommerceConfig() {
 
 function getJsonFromFile() {
 	$file = 'https://extensionsell.com/app/xml/export2.php?shop=cutting-edge-products-inc-dev&output=json&save=1';
+
 	return json_decode( file_get_contents( $file ), true )['Product'];
 }
 
 function checkProductBySku( $skuCode ) {
-	return wc_get_product_id_by_sku($skuCode);
+	return wc_get_product_id_by_sku( $skuCode );
 }
 
 function createProducts() {
 	$woocommerce = getWoocommerceConfig();
 	$products    = getJsonFromFile();
-	$imgCounter = 0;
+	$imgCounter  = 0;
 	foreach ( $products as $product ) {
 		$productExist = checkProductBySku( $product['sku'] );
-		print_r($product);exit;
-		$imagesFormated = array();
-		$url_array =explode('/',$product['url']);
-		$slug= end($url_array);
-		/*Main information */
+		$imagesFormatted = array();
 		$name          = $product['name'];
 		$sku           = $product['sku'];
 		$description   = $product['description'];
-		$images        = $product['images'];
-		$articulos     = $product['articulos'];
-		$categories    = $product['categorias'];
+		$images        = $product['images']['image'];
+		$category    = $product['category'];
 		$categoriesIds = array();
-		foreach ( $images as $image ) {
-			$imagesFormated[] = [
-				'src'      => $image,
-				'position' => 0
-			]; /* TODO: FIX POSITON */
-			$imgCounter ++;
-		}
 
-
-		/* Prepare categories */
-		foreach ( $categories as $category ) {
-			$categoriesIds[] = [ 'id' => getCategoryIdByName( $category ) ];
+		if ( ! empty( $images ) ) {
+			foreach ( $images as $image ) {
+				$imagesFormatted[] = [
+					'src'      => $image,
+					'position' => 0
+				];
+				$imgCounter ++;
+			}
 		}
+		/*
+		if ( ! empty( $categories ) ) {
+			foreach ( $categories as $category ) {
+				$categoriesIds[] = [ 'id' => getCategoryIdByName( $category ) ];
+			}
+		}
+		*/
+
 		$finalProduct = [
-			'name'        => $name,
-			'slug'        => $slug,
-			'sku'         => $sku,
-			'description' => $description,
-			'images'      => $imagesFormated,
-			'categories'  => $categoriesIds,
-			'attributes'  => getProductAttributesNames( $articulos )
-
+			'post_author' => 1,
+			'post_title'        => $name,
+			'post_type'=>'product',
+			'post_status'=>'publish',
+			'post_content' => $description,
 		];
-
-		print_r($finalProduct);exit;
-
+//
+//		'images'      => $imagesFormatted,
+//			'category'  => getCategoryIdByName( $category ),
+		if ( ! empty( $product ) ) {
+			$url_array            = explode( '/', $product['url'] );
+			$slug = end( $url_array );
+		}
 
 		if ( ! $productExist ) {
-			$productResult = $woocommerce->post( 'products', $finalProduct );
+			$post_id = wp_insert_post( $finalProduct );
+			wp_set_object_terms( $post_id, 'simple', 'product_type' );
+			update_post_meta( $post_id, '_visibility', 'visible' );
+			update_post_meta( $post_id, '_stock_status', 'instock');
+			update_post_meta( $post_id, 'total_sales', '0' );
+			update_post_meta( $post_id, '_downloadable', 'no' );
+			update_post_meta( $post_id, '_virtual', 'yes' );
+			update_post_meta( $post_id, '_regular_price', '' );
+			update_post_meta( $post_id, '_sale_price', '' );
+			update_post_meta( $post_id, '_purchase_note', '' );
+			update_post_meta( $post_id, '_featured', 'no' );
+			update_post_meta( $post_id, '_weight', '' );
+			update_post_meta( $post_id, '_length', '' );
+			update_post_meta( $post_id, '_width', '' );
+			update_post_meta( $post_id, '_height', '' );
+			update_post_meta( $post_id, '_sku', $sku );
+			update_post_meta( $post_id, '_product_attributes', array() );
+			update_post_meta( $post_id, '_sale_price_dates_from', '' );
+			update_post_meta( $post_id, '_sale_price_dates_to', '' );
+			update_post_meta( $post_id, '_price', '' );
+			update_post_meta( $post_id, '_sold_individually', '' );
+			update_post_meta( $post_id, '_manage_stock', 'no' );
+			update_post_meta( $post_id, '_backorders', 'no' );
+			update_post_meta( $post_id, '_stock', '5' );
+//			$productResult = $woocommerce->post( 'products', $finalProduct );
 		} else {
 			/*Update product information */
 			$idProduct = $productExist['idProduct'];
-			$woocommerce->put( 'products/' . $idProduct, $finalProduct );
+//			$woocommerce->put( 'products/' . $idProduct, $finalProduct );
 		}
 	}
 }
@@ -98,7 +124,7 @@ function getCategories() {
 }
 
 function getCategoryIdByName( $categoryName ) {
-	return get_cat_ID($categoryName);
+	return get_cat_ID( $categoryName );
 }
 
 function getProductAttributesNames( $articulos ) {
