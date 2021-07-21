@@ -1,0 +1,22 @@
+@font-face {
+  font-family: "Huntor";
+  src: url("../fonts/huntor_light.eot");
+  src: url("../fonts/huntor_light.eot") format("embedded-opentype"), url("../fonts/huntor_light.woff2") format("woff2"), url("../fonts/huntor_light.woff") format("woff"),
+    url("../fonts/huntor_light.ttf") format("truetype"), url("../fonts/huntor_light.svg#huntor_light") format("svg");
+  font-weight: 400;
+}
+
+@font-face {
+  font-family: "Huntor";
+  src: url("../fonts/huntor_bold.eot");
+  src: url("../fonts/huntor_bold.eot") format("embedded-opentype"), url("../fonts/huntor_bold.woff2") format("woff2"), url("../fonts/huntor_bold.woff") format("woff"),
+    url("../fonts/huntor_bold.ttf") format("truetype"), url("../fonts/huntor_bold.svg#huntor_bold") format("svg");
+  font-weight: 600;
+}
+
+@font-face {
+  font-family: "Huntor Heading";
+  src: url("../fonts/huntor_heading.eot");
+  src: url("../fonts/huntor_heading.eot") format("embedded-opentype"), url("../fonts/huntor_heading.woff2") format("woff2"), url("../fonts/huntor_heading.woff") format("woff"),
+    url("../fonts/huntor_heading.ttf") format("truetype"), url("../fonts/huntor_heading.svg#huntor_heading") format("svg");
+}

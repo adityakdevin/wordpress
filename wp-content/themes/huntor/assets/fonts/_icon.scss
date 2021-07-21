@@ -1,0 +1,321 @@
+@font-face {
+    font-family: "opal-icon";
+    src: url('assets/fonts/opal-icon.eot');
+    src: url('assets/fonts/opal-icon.eot?#iefix') format('eot'),
+    url('assets/fonts/opal-icon.woff2') format('woff2'),
+    url('assets/fonts/opal-icon.woff') format('woff'),
+    url('assets/fonts/opal-icon.ttf') format('truetype'),
+    url('assets/fonts/opal-icon.svg#opal-icon') format('svg');
+}
+
+[class*="opal-icon-"]:before{
+    font-family: "opal-icon";
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    font-style: normal;
+    font-variant: normal;
+    font-weight: normal;
+    text-decoration: none;
+    text-transform: none;
+}
+
+.opal-icon {
+    font-family: "opal-icon";
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    font-style: normal;
+    font-variant: normal;
+    font-weight: normal;
+    text-decoration: none;
+    text-transform: none;
+}
+
+@function opal-icon-char($filename) {
+    $char: "";
+
+    @if $filename == add-to-cart {
+    $char: "\E001";
+}
+    @if $filename == anchor {
+    $char: "\E002";
+}
+    @if $filename == angle-left {
+    $char: "\E003";
+}
+    @if $filename == angle-right {
+    $char: "\E004";
+}
+    @if $filename == arrow-left {
+    $char: "\E005";
+}
+    @if $filename == arrow-right {
+    $char: "\E006";
+}
+    @if $filename == badge-percent {
+    $char: "\E007";
+}
+    @if $filename == boot {
+    $char: "\E008";
+}
+    @if $filename == bow-arrow {
+    $char: "\E009";
+}
+    @if $filename == box-alt {
+    $char: "\E00A";
+}
+    @if $filename == bullseye {
+    $char: "\E00B";
+}
+    @if $filename == campground {
+    $char: "\E00C";
+}
+    @if $filename == cart-empty {
+    $char: "\E00D";
+}
+    @if $filename == cart {
+    $char: "\E00E";
+}
+    @if $filename == chevron-down {
+    $char: "\E00F";
+}
+    @if $filename == chevron-left {
+    $char: "\E010";
+}
+    @if $filename == chevron-right {
+    $char: "\E011";
+}
+    @if $filename == chevron-up {
+    $char: "\E012";
+}
+    @if $filename == close {
+    $char: "\E013";
+}
+    @if $filename == compare {
+    $char: "\E014";
+}
+    @if $filename == decor {
+    $char: "\E015";
+}
+    @if $filename == email {
+    $char: "\E016";
+}
+    @if $filename == experience {
+    $char: "\E017";
+}
+    @if $filename == filter {
+    $char: "\E018";
+}
+    @if $filename == fish {
+    $char: "\E019";
+}
+    @if $filename == globe-asia {
+    $char: "\E01A";
+}
+    @if $filename == heart {
+    $char: "\E01B";
+}
+    @if $filename == hood-cloak {
+    $char: "\E01C";
+}
+    @if $filename == menu {
+    $char: "\E01D";
+}
+    @if $filename == minus {
+    $char: "\E01E";
+}
+    @if $filename == no-favorites {
+    $char: "\E01F";
+}
+    @if $filename == phone {
+    $char: "\E020";
+}
+    @if $filename == plus {
+    $char: "\E021";
+}
+    @if $filename == quality {
+    $char: "\E022";
+}
+    @if $filename == quickview {
+    $char: "\E023";
+}
+    @if $filename == search {
+    $char: "\E024";
+}
+    @if $filename == seedling {
+    $char: "\E025";
+}
+    @if $filename == shipping-fast {
+    $char: "\E026";
+}
+    @if $filename == shuttle-van {
+    $char: "\E027";
+}
+    @if $filename == th-grid {
+    $char: "\E028";
+}
+    @if $filename == th-list {
+    $char: "\E029";
+}
+    @if $filename == tradition {
+    $char: "\E02A";
+}
+    @if $filename == undo-alt {
+    $char: "\E02B";
+}
+    @if $filename == user {
+    $char: "\E02C";
+}
+    @if $filename == wishlist-fill {
+    $char: "\E02D";
+}
+    @if $filename == wishlist {
+    $char: "\E02E";
+}
+
+@return $char;
+}
+
+@mixin opal-icon($filename, $insert: before) {
+&:#{$insert} {
+    content: opal-icon-char($filename);
+}
+}
+
+.opal-icon-add-to-cart {
+    @include opal-icon(add-to-cart);
+}
+.opal-icon-anchor {
+    @include opal-icon(anchor);
+}
+.opal-icon-angle-left {
+    @include opal-icon(angle-left);
+}
+.opal-icon-angle-right {
+    @include opal-icon(angle-right);
+}
+.opal-icon-arrow-left {
+    @include opal-icon(arrow-left);
+}
+.opal-icon-arrow-right {
+    @include opal-icon(arrow-right);
+}
+.opal-icon-badge-percent {
+    @include opal-icon(badge-percent);
+}
+.opal-icon-boot {
+    @include opal-icon(boot);
+}
+.opal-icon-bow-arrow {
+    @include opal-icon(bow-arrow);
+}
+.opal-icon-box-alt {
+    @include opal-icon(box-alt);
+}
+.opal-icon-bullseye {
+    @include opal-icon(bullseye);
+}
+.opal-icon-campground {
+    @include opal-icon(campground);
+}
+.opal-icon-cart-empty {
+    @include opal-icon(cart-empty);
+}
+.opal-icon-cart {
+    @include opal-icon(cart);
+}
+.opal-icon-chevron-down {
+    @include opal-icon(chevron-down);
+}
+.opal-icon-chevron-left {
+    @include opal-icon(chevron-left);
+}
+.opal-icon-chevron-right {
+    @include opal-icon(chevron-right);
+}
+.opal-icon-chevron-up {
+    @include opal-icon(chevron-up);
+}
+.opal-icon-close {
+    @include opal-icon(close);
+}
+.opal-icon-compare {
+    @include opal-icon(compare);
+}
+.opal-icon-decor {
+    @include opal-icon(decor);
+}
+.opal-icon-email {
+    @include opal-icon(email);
+}
+.opal-icon-experience {
+    @include opal-icon(experience);
+}
+.opal-icon-filter {
+    @include opal-icon(filter);
+}
+.opal-icon-fish {
+    @include opal-icon(fish);
+}
+.opal-icon-globe-asia {
+    @include opal-icon(globe-asia);
+}
+.opal-icon-heart {
+    @include opal-icon(heart);
+}
+.opal-icon-hood-cloak {
+    @include opal-icon(hood-cloak);
+}
+.opal-icon-menu {
+    @include opal-icon(menu);
+}
+.opal-icon-minus {
+    @include opal-icon(minus);
+}
+.opal-icon-no-favorites {
+    @include opal-icon(no-favorites);
+}
+.opal-icon-phone {
+    @include opal-icon(phone);
+}
+.opal-icon-plus {
+    @include opal-icon(plus);
+}
+.opal-icon-quality {
+    @include opal-icon(quality);
+}
+.opal-icon-quickview {
+    @include opal-icon(quickview);
+}
+.opal-icon-search {
+    @include opal-icon(search);
+}
+.opal-icon-seedling {
+    @include opal-icon(seedling);
+}
+.opal-icon-shipping-fast {
+    @include opal-icon(shipping-fast);
+}
+.opal-icon-shuttle-van {
+    @include opal-icon(shuttle-van);
+}
+.opal-icon-th-grid {
+    @include opal-icon(th-grid);
+}
+.opal-icon-th-list {
+    @include opal-icon(th-list);
+}
+.opal-icon-tradition {
+    @include opal-icon(tradition);
+}
+.opal-icon-undo-alt {
+    @include opal-icon(undo-alt);
+}
+.opal-icon-user {
+    @include opal-icon(user);
+}
+.opal-icon-wishlist-fill {
+    @include opal-icon(wishlist-fill);
+}
+.opal-icon-wishlist {
+    @include opal-icon(wishlist);
+}
