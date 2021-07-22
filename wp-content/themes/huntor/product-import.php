@@ -315,6 +315,24 @@ function createNewProducts( $product ) {
 			try {
 				foreach ( $variations as $variation ) {
 					$variant_product_id = checkProductBySku( $variation["sku"] );
+					print_r($product);
+					print_r($variant_product_id);exit();
+					$product = wc_get_product($product_id);
+
+					$variation_post = array(
+						'post_title'  => $variation["name"],
+						'post_name'   => 'product-'.$product_id.'-variation',
+						'post_status' => 'publish',
+						'post_parent' => $product_id,
+						'post_type'   => 'product_variation',
+						'guid'        => $product->get_permalink()
+					);
+
+					// Creating the product variation
+					$variation_id = wp_insert_post( $variation_post );
+
+
+
 					$objVariation       = ! empty( $variant_product_id ) ? new WC_Product_Variation( $variant_product_id ) : new WC_Product_Variation();
 					$objVariation       = new WC_Product_Variation();
 					$objVariation->set_name( $variation["name"] );

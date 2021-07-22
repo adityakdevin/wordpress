@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="WebServers">
+    <option name="servers">
+      <webServer id="45b91785-5573-4212-ab49-61ccbaa6dd49" name="hardlinetactics">
+        <fileTransfer rootFolder="/var/www/html" accessType="SFTP" host="34.122.158.79" port="2800" sshConfigId="e634f464-1b02-4b0d-8ac2-2369cae7f6c7" sshConfig="runte@34.122.158.79:2800 password">
+          <advancedOptions>
+            <advancedOptions dataProtectionLevel="Private" keepAliveTimeout="0" passiveMode="true" shareSSLContext="true" />
+          </advancedOptions>
+        </fileTransfer>
+      </webServer>
+    </option>
+  </component>
+</project>
