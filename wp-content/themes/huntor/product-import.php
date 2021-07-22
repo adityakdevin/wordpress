@@ -189,18 +189,31 @@ function prepareInitialConfig() {
 	createProducts();
 	echo ( 'Done!' ) . "\n";
 }
+function checkProductIsVariable($variants){
+	return ! ( count( $variants ) == count( $variants, COUNT_RECURSIVE ) );
+}
 
 /**
  * @throws WC_Data_Exception
  */
 function createNewProducts( $product ) {
+
 	$product_id = checkProductBySku( $product['sku'] );
-	$objProduct = ! empty( $product_id ) ? new WC_Product_Variable( $product_id ) : new WC_Product_Variable();
+	$variants = [];
+	if ( ! empty( $product['variant'] ) ) {
+		$variants = $product['variant'];
+		if (!checkProductIsVariable($variants)){
+			$objProduct = ! empty( $product_id ) ? new WC_Product_Simple( $product_id ) : new WC_Product_Simple();
+		}else{
+			$objProduct = ! empty( $product_id ) ? new WC_Product_Variable( $product_id ) : new WC_Product_Variable();
+		}
+	}else{
+		return false;
+	}
 	$price      = (float) str_replace( $product['compare_at_price'], '', $product['price'] );
 	$is_stock   = $product['in_stock'] == 'In Stock';
 	$in_stock   = $is_stock ? 'instock' : 'outstock';
 	$categories = get_category_ids( explode( ',', $product['category'] ) );
-
 	$objProduct->set_name( $product['name'] );
 	$objProduct->set_status( "publish" );
 	$objProduct->set_catalog_visibility( "visible" );
@@ -218,15 +231,6 @@ function createNewProducts( $product ) {
 	$objProduct->set_category_ids( $categories );
 	$images           = formatted_images( $product );
 	$productImagesIDs = get_image_ids( $images );
-	/*
-	  $productImagesIDs = array();
-	  foreach ( $images as $image ) {
-		$mediaID = uploadMedia( $image );
-		if ( $mediaID ) {
-			$productImagesIDs[] = $mediaID;
-		}
-	}
-	*/
 	if ( $productImagesIDs ) {
 		$objProduct->set_image_id( $productImagesIDs[0] );
 		if ( count( $productImagesIDs ) > 1 ) {
@@ -235,64 +239,46 @@ function createNewProducts( $product ) {
 		}
 	}
 	$product_id = $objProduct->save();
-
-	$attributes = array(
-		array(
-			"name"      => "Size",
-			"options"   => array( "S", "L", "XL", "XXL" ),
-			"position"  => 1,
-			"visible"   => 1,
-			"variation" => 1
-		),
-		array(
-			"name"      => "Color",
-			"options"   => array( "Red", "Blue", "Black", "White" ),
-			"position"  => 2,
-			"visible"   => 1,
-			"variation" => 1
-		)
-	);
-	if ( $attributes ) {
-		$productAttributes = array();
-		foreach ( $attributes as $attribute ) {
-			$attr = wc_sanitize_taxonomy_name( stripslashes( $attribute["name"] ) ); // remove any unwanted chars and return the valid string for taxonomy name
-			$attr = 'pa_' . $attr; // woocommerce prepend pa_ to each attribute name
-			if ( $attribute["options"] ) {
-				foreach ( $attribute["options"] as $option ) {
-					wp_set_object_terms( $product_id, $option, $attr, true ); // save the possible option value for the attribute which will be used for variation later
-				}
-			}
-			$productAttributes[ sanitize_title( $attr ) ] = array(
-				'name'         => sanitize_title( $attr ),
-				'value'        => $attribute["options"],
-				'position'     => $attribute["position"],
-				'is_visible'   => $attribute["visible"],
-				'is_variation' => $attribute["variation"],
-				'is_taxonomy'  => 1
-			);
-		}
-		update_post_meta( $product_id, '_product_attributes', $productAttributes ); // save the meta entry for product attributes
-	}
-
-	if ( ! empty( $product['variant'] ) ) {
-		$variants   = $product['variant'];
-		$variations = [];
-		if ( count( $variants ) == count( $variants, COUNT_RECURSIVE ) ) {
-			$variant_name  = ( trim( $variants['name'] ) == 'Default Title' ) ? $objProduct->get_name( 'edit' ) : $variants['combine_name'];
-			$variant_price = (float) str_replace( $variants['compare_at_price'], '', $variants['price'] );
-			$variations[]  =
-				array(
-					"name"           => $variant_name,
-					"price"          => $variant_price,
-					"sku"            => $variants['sku'],
-					"attributes"     => array(
-						array( "name" => "Size", "option" => "L" ),
-						array( "name" => "Color", "option" => "Red" )
-					),
-					"manage_stock"   => 1,
-					"stock_quantity" => $variants['quantity']
-				);
-		} else {
+	if (checkProductIsVariable($variants)){
+		//		$attributes = array(
+//			array(
+//				"name"      => "Size",
+//				"options"   => array( "S", "L", "XL", "XXL" ),
+//				"position"  => 1,
+//				"visible"   => 1,
+//				"variation" => 1
+//			),
+//			array(
+//				"name"      => "Color",
+//				"options"   => array( "Red", "Blue", "Black", "White" ),
+//				"position"  => 2,
+//				"visible"   => 1,
+//				"variation" => 1
+//			)
+//		);
+//		if ( $attributes ) {
+//			$productAttributes = array();
+//			foreach ( $attributes as $attribute ) {
+//				$attr = wc_sanitize_taxonomy_name( stripslashes( $attribute["name"] ) ); // remove any unwanted chars and return the valid string for taxonomy name
+//				$attr = 'pa_' . $attr; // woocommerce prepend pa_ to each attribute name
+//				if ( $attribute["options"] ) {
+//					foreach ( $attribute["options"] as $option ) {
+//						wp_set_object_terms( $product_id, $option, $attr, true ); // save the possible option value for the attribute which will be used for variation later
+//					}
+//				}
+//				$productAttributes[ sanitize_title( $attr ) ] = array(
+//					'name'         => sanitize_title( $attr ),
+//					'value'        => $attribute["options"],
+//					'position'     => $attribute["position"],
+//					'is_visible'   => $attribute["visible"],
+//					'is_variation' => $attribute["variation"],
+//					'is_taxonomy'  => 1
+//				);
+//			}
+//			update_post_meta( $product_id, '_product_attributes', $productAttributes ); // save the meta entry for product attributes
+//		}
+		print_r($variants);
+		print_r($objProduct);  exit();
 			foreach ( $variants as $variant ) {
 				$variant_name  = ( trim( $variant['name'] ) == 'Default Title' ) ? $objProduct->get_name( 'edit' ) : $variant['combine_name'];
 				$variant_price = (float) str_replace( $variant['compare_at_price'], '', $variant['price'] );
@@ -302,62 +288,57 @@ function createNewProducts( $product ) {
 						"price"          => $variant_price,
 						"sku"            => $variant['sku'],
 						"attributes"     => array(
-							array( "name" => "Size", "option" => "L" ),
+//							array( "name" => "Size", "option" => "L" ),
 							array( "name" => "Color", "option" => "Red" )
 						),
 						"manage_stock"   => 1,
 						"stock_quantity" => $variant['quantity']
 					);
 			}
-		}
+			if ( ! empty( $variations ) ) {
+				try {
+					foreach ( $variations as $variation ) {
+						$variant_product_id = checkProductBySku( $variation["sku"] );
+						print_r($product);
+						print_r($variant_product_id);exit();
+						$product = wc_get_product($product_id);
 
-		if ( ! empty( $variations ) ) {
-			try {
-				foreach ( $variations as $variation ) {
-					$variant_product_id = checkProductBySku( $variation["sku"] );
-					print_r($product);
-					print_r($variant_product_id);exit();
-					$product = wc_get_product($product_id);
+						$variation_post = array(
+							'post_title'  => $variation["name"],
+							'post_name'   => 'product-'.$product_id.'-variation',
+							'post_status' => 'publish',
+							'post_parent' => $product_id,
+							'post_type'   => 'product_variation',
+							'guid'        => $product->get_permalink()
+						);
 
-					$variation_post = array(
-						'post_title'  => $variation["name"],
-						'post_name'   => 'product-'.$product_id.'-variation',
-						'post_status' => 'publish',
-						'post_parent' => $product_id,
-						'post_type'   => 'product_variation',
-						'guid'        => $product->get_permalink()
-					);
-
-					// Creating the product variation
-					$variation_id = wp_insert_post( $variation_post );
-
-
-
-					$objVariation       = ! empty( $variant_product_id ) ? new WC_Product_Variation( $variant_product_id ) : new WC_Product_Variation();
-					$objVariation       = new WC_Product_Variation();
-					$objVariation->set_name( $variation["name"] );
-					$objVariation->set_price( $variation["price"] );
-					$objVariation->set_regular_price( $variation["price"] );
-					$objVariation->set_parent_id( $product_id );
-					if ( ! empty( $variation["sku"] ) ) {
-						$objVariation->set_sku( $variation["sku"] );
+						// Creating the product variation
+						$variation_id = wp_insert_post( $variation_post );
+						$objVariation       = ! empty( $variant_product_id ) ? new WC_Product_Variation( $variant_product_id ) : new WC_Product_Variation();
+						$objVariation       = new WC_Product_Variation();
+						$objVariation->set_name( $variation["name"] );
+						$objVariation->set_price( $variation["price"] );
+						$objVariation->set_regular_price( $variation["price"] );
+						$objVariation->set_parent_id( $product_id );
+						if ( ! empty( $variation["sku"] ) ) {
+							$objVariation->set_sku( $variation["sku"] );
+						}
+						$objVariation->set_manage_stock( $variation["manage_stock"] );
+						$objVariation->set_stock_quantity( $variation["stock_quantity"] );
+						$objVariation->set_stock_status( $variation['stock_status'] ); // in stock or out of stock value
+						$var_attributes = array();
+						foreach ( $variation["attributes"] as $attribute ) {
+							$taxonomy                    = "pa_" . wc_sanitize_taxonomy_name( stripslashes( $attribute["name"] ) );
+							$attr_val_slug               = wc_sanitize_taxonomy_name( stripslashes( $attribute["option"] ) );
+							$var_attributes[ $taxonomy ] = $attr_val_slug;
+						}
+						$objVariation->set_attributes( $var_attributes );
+						$objVariation->save();
 					}
-					$objVariation->set_manage_stock( $variation["manage_stock"] );
-					$objVariation->set_stock_quantity( $variation["stock_quantity"] );
-					$objVariation->set_stock_status( $variation['stock_status'] ); // in stock or out of stock value
-					$var_attributes = array();
-					foreach ( $variation["attributes"] as $attribute ) {
-						$taxonomy                    = "pa_" . wc_sanitize_taxonomy_name( stripslashes( $attribute["name"] ) );
-						$attr_val_slug               = wc_sanitize_taxonomy_name( stripslashes( $attribute["option"] ) );
-						$var_attributes[ $taxonomy ] = $attr_val_slug;
-					}
-					$objVariation->set_attributes( $var_attributes );
-					$objVariation->save();
+				} catch ( Exception $e ) {
+					var_dump($e->getMessage());
 				}
-			} catch ( Exception $e ) {
-				var_dump($e->getMessage());
 			}
-		}
 	}
 }
 
